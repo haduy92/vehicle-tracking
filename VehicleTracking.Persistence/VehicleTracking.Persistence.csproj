@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190207072637_InitialCreate.cs" />
+    <Compile Remove="Migrations\20190207074618_InitialCreate.cs" />
+    <Compile Remove="Migrations\20190207074727_InitialCreate.cs" />
+    <Compile Remove="Migrations\20190207093835_InitialCreate.cs" />
+    <Compile Remove="Migrations\20190207100923_InitialCreate.cs" />
+    <Compile Remove="Migrations\20190208031335_InitialCreate.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VehicleTracking.Common\VehicleTracking.Common.csproj" />
+    <ProjectReference Include="..\VehicleTracking.Domain\VehicleTracking.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

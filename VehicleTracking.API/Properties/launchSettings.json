@@ -1,0 +1,33 @@
+﻿{
+	"$schema": "http://json.schemastore.org/launchsettings.json",
+	"iisSettings": {
+		"windowsAuthentication": false,
+		"anonymousAuthentication": true,
+		"iis": {
+			"applicationUrl": "http://localhost/VehicleTracking.API",
+			"sslPort": 0
+		},
+		"iisExpress": {
+			"applicationUrl": "http://localhost:5000",
+			"sslPort": 0
+		}
+	},
+	"profiles": {
+		"IIS Express": {
+			"commandName": "IISExpress",
+			"launchBrowser": true,
+			"launchUrl": "api/users/login",
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Development"
+			}
+		},
+		"IIS": {
+			"commandName": "IIS",
+			"launchBrowser": true,
+			"launchUrl": "api/users/login",
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Production"
+			}
+		}
+	}
+}

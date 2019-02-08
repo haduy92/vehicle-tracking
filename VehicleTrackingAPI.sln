@@ -1,0 +1,89 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleTracking.Domain", "VehicleTracking.Domain\VehicleTracking.Domain.csproj", "{388D6948-702A-4649-AF83-4ECBDCECA06B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{207D95D8-D285-4780-B24E-6266419DA295}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{FDE858B7-0A45-4240-9FDB-3AEA6AD9CDF3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{187852F4-EB7B-4654-9CCB-3A1CCCA9E736}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{49CB9B88-A681-4625-8E62-C24C770C81B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleTracking.Common", "VehicleTracking.Common\VehicleTracking.Common.csproj", "{9E393FD6-6546-4190-8ED9-A04E593B665E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleTracking.Persistence", "VehicleTracking.Persistence\VehicleTracking.Persistence.csproj", "{B36CE26B-918D-46C3-A246-B2E9EC6F5219}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleTracking.Infrastructure", "VehicleTracking.Infrastructure\VehicleTracking.Infrastructure.csproj", "{B36BF350-56E3-478C-89D8-FF57147F7222}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleTracking.Application", "VehicleTracking.Application\VehicleTracking.Application.csproj", "{4B029951-8D7C-4111-AC5B-13A991515DB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{0E28F2B0-9F57-4E0E-99B7-16F7A083C82B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleTracking.API", "VehicleTracking.API\VehicleTracking.API.csproj", "{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8627287D-4EFE-47A5-BD7A-16584B502D8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleTracking.Test", "VehicleTracking.Test\VehicleTracking.Test.csproj", "{5F6483B0-A522-436B-AE72-2B033A44B46A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{388D6948-702A-4649-AF83-4ECBDCECA06B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{388D6948-702A-4649-AF83-4ECBDCECA06B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{388D6948-702A-4649-AF83-4ECBDCECA06B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{388D6948-702A-4649-AF83-4ECBDCECA06B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E393FD6-6546-4190-8ED9-A04E593B665E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E393FD6-6546-4190-8ED9-A04E593B665E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E393FD6-6546-4190-8ED9-A04E593B665E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E393FD6-6546-4190-8ED9-A04E593B665E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B36CE26B-918D-46C3-A246-B2E9EC6F5219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B36CE26B-918D-46C3-A246-B2E9EC6F5219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B36CE26B-918D-46C3-A246-B2E9EC6F5219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B36CE26B-918D-46C3-A246-B2E9EC6F5219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B36BF350-56E3-478C-89D8-FF57147F7222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B36BF350-56E3-478C-89D8-FF57147F7222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B36BF350-56E3-478C-89D8-FF57147F7222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B36BF350-56E3-478C-89D8-FF57147F7222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B029951-8D7C-4111-AC5B-13A991515DB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B029951-8D7C-4111-AC5B-13A991515DB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B029951-8D7C-4111-AC5B-13A991515DB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B029951-8D7C-4111-AC5B-13A991515DB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F6483B0-A522-436B-AE72-2B033A44B46A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F6483B0-A522-436B-AE72-2B033A44B46A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F6483B0-A522-436B-AE72-2B033A44B46A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F6483B0-A522-436B-AE72-2B033A44B46A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{388D6948-702A-4649-AF83-4ECBDCECA06B} = {FDE858B7-0A45-4240-9FDB-3AEA6AD9CDF3}
+		{FDE858B7-0A45-4240-9FDB-3AEA6AD9CDF3} = {207D95D8-D285-4780-B24E-6266419DA295}
+		{187852F4-EB7B-4654-9CCB-3A1CCCA9E736} = {207D95D8-D285-4780-B24E-6266419DA295}
+		{49CB9B88-A681-4625-8E62-C24C770C81B7} = {207D95D8-D285-4780-B24E-6266419DA295}
+		{9E393FD6-6546-4190-8ED9-A04E593B665E} = {49CB9B88-A681-4625-8E62-C24C770C81B7}
+		{B36CE26B-918D-46C3-A246-B2E9EC6F5219} = {187852F4-EB7B-4654-9CCB-3A1CCCA9E736}
+		{B36BF350-56E3-478C-89D8-FF57147F7222} = {187852F4-EB7B-4654-9CCB-3A1CCCA9E736}
+		{4B029951-8D7C-4111-AC5B-13A991515DB6} = {FDE858B7-0A45-4240-9FDB-3AEA6AD9CDF3}
+		{0E28F2B0-9F57-4E0E-99B7-16F7A083C82B} = {207D95D8-D285-4780-B24E-6266419DA295}
+		{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE} = {0E28F2B0-9F57-4E0E-99B7-16F7A083C82B}
+		{5F6483B0-A522-436B-AE72-2B033A44B46A} = {8627287D-4EFE-47A5-BD7A-16584B502D8F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5F2F5A7-8B73-4321-A886-B01C514C0A55}
+	EndGlobalSection
+EndGlobal
