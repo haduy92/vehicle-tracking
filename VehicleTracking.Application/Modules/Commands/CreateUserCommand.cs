@@ -17,6 +17,7 @@ namespace VehicleTracking.Application.Modules.Commands
 		public string LastName { get; set; }
 		public string EmailAddress { get; set; }
 		public string Password { get; set; }
+		
 		// Address properties
 		public string StreetAddress1 { get; set; }
 		public string StreetAddress2 { get; set; }
