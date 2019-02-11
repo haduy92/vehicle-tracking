@@ -21,7 +21,9 @@ namespace VehicleTracking.Application.Modules.Notifications
 
 			public async Task Handle(UserCreated notification, CancellationToken cancellationToken)
             {
+				// TODO: OnUserCreated
                 await _notification.SendAsync(new Message());
+				// TODO: OnAfterUserCreated
             }
 		}
 	}

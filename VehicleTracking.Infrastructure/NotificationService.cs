@@ -8,6 +8,7 @@ namespace VehicleTracking.Infrastructure
     {
         public Task SendAsync(Message message)
         {
+			// Send email with message
             return Task.CompletedTask;
         }
     }
