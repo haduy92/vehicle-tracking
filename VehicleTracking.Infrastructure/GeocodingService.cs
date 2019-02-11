@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
-using VehicleTracking.Common;
+using VehicleTracking.Application.Interfaces;
 
 namespace VehicleTracking.Infrastructure
 {

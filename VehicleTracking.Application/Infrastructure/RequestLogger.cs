@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleTracking.Application.Helpers;
 using VehicleTracking.Application.Modules.Queries;
-using VehicleTracking.Common;
 
 namespace VehicleTracking.Application.Infrastructure
 {
@@ -11,30 +11,26 @@ namespace VehicleTracking.Application.Infrastructure
 		where TRequest : BaseRequest
 	{
 		private readonly ILogger _logger;
-		private readonly IToken _token;
 
-		public RequestLogger(ILogger<TRequest> logger, IToken token)
+		public RequestLogger(ILogger<TRequest> logger)
 		{
 			_logger = logger;
-			_token = token;
 		}
 
 		public Task Process(TRequest request, CancellationToken cancellationToken)
 		{
-			var name = typeof(TRequest).Name;
+			var userInfo = "";
 
-			if (request is GetTokenQuery)
+			if (request is GetTokenQuery tokenQuery)
 			{
-				var tokenQuery = request as GetTokenQuery;
-				_logger.LogInformation("Request: {@Name} by email {@Email}", name, tokenQuery.EmailAddress);
+				userInfo = $"email {tokenQuery.EmailAddress}";
 			}
 			else
 			{
-				// Add User Details
-				var userId = _token.GetValue(request.Token, "user_id");
-
-				_logger.LogInformation("Request: {@Name} by user {@UserId}", name, userId);
+				userInfo = $"user {TokenHelper.GetValue(request.Token, "user_id")}";
 			}
+
+			_logger.LogInformation("Request by {UserInfo}", userInfo);
 
 			return Task.CompletedTask;
 		}

@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using VehicleTracking.Common;
 
-namespace VehicleTracking.Infrastructure
+namespace VehicleTracking.Application.Helpers
 {
-	public class PasswordHelper : IPassword
+	public class PasswordHelper
 	{
-		public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+		/// <summary>
+		/// Create a hash and salt from password string in byte array.
+		/// </summary>
+		/// <param name="password">Password</param>
+		/// <param name="passwordHash"></param>
+		/// <param name="passwordSalt"></param>
+		public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
 		{
 			if (password == null) throw new ArgumentNullException("password");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
@@ -18,8 +23,14 @@ namespace VehicleTracking.Infrastructure
 				passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
 			}
 		}
-
-		public bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+		
+		/// <summary>
+		/// Check if given password string match.
+		/// </summary>
+		/// <param name="password">Password</param>
+		/// <param name="passwordHash"></param>
+		/// <param name="passwordSalt"></param>
+		public static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
 		{
 			if (password == null) throw new ArgumentNullException("password");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");

@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleTracking.Application.Exceptions;
+using VehicleTracking.Application.Helpers;
 using VehicleTracking.Application.Infrastructure;
-using VehicleTracking.Common;
+using VehicleTracking.Application.Interfaces;
+using VehicleTracking.Application.Modules.Notifications;
 using VehicleTracking.Domain.Entities;
 using VehicleTracking.Domain.ValueObjects;
 using VehicleTracking.Persistence.Infrastructure;
@@ -30,16 +32,14 @@ namespace VehicleTracking.Application.Modules.Commands
 		public class Handler : IRequestHandler<CreateUserCommand, Unit>
 		{
 			private readonly IUnitOfWork _unitOfWork;
-			private readonly IPassword _password;
             private readonly IMediator _mediator;
+			private readonly INotificationService _notificationService;
 
-			public Handler(IUnitOfWork unitOfWork,
-				IPassword password,
-				IMediator mediator)
+			public Handler(IUnitOfWork unitOfWork, IMediator mediator, INotificationService notificationService)
 			{
 				_unitOfWork = unitOfWork;
-				_password = password;
 				_mediator = mediator;
+				_notificationService = notificationService;
 			}
 
 			public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -54,7 +54,7 @@ namespace VehicleTracking.Application.Modules.Commands
 				}
 
 				byte[] passwordHash, passwordSalt;
-				_password.CreatePasswordHash(request.Password, out passwordHash, out passwordSalt);
+				PasswordHelper.CreatePasswordHash(request.Password, out passwordHash, out passwordSalt);
 
 				var entity = new User
 				{
@@ -66,8 +66,9 @@ namespace VehicleTracking.Application.Modules.Commands
 						request.State, request.Country, request.ZipCode)
 				};
 
-				_unitOfWork.UserRepository.Create(entity);
-				_unitOfWork.Commit();
+				await _unitOfWork.UserRepository.CreateAsync(entity);
+				await _mediator.Publish(new UserCreated { UserId = entity.Id.ToString() });
+				await _unitOfWork.CommitAsync();
 
 				return Unit.Value;
 			}

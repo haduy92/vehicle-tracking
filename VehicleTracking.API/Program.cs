@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using VehicleTracking.Common;
-using VehicleTracking.Infrastructure;
 using VehicleTracking.Persistence;
 using VehicleTracking.Persistence.Infrastructure;
 
@@ -23,11 +22,10 @@ namespace VehicleTracking.API
 				{
 					var context = (VehicleTrackingDbContext) scope.ServiceProvider.GetService<IDbContext>();
 					var unitOfWork = (UnitOfWork) scope.ServiceProvider.GetService<IUnitOfWork>();
-					var password = (PasswordHelper) scope.ServiceProvider.GetService<IPassword>();
 
 					context.Database.Migrate();
 					context.EnsureDatabaseCreated();
-					VehicleTrackingDataSeeder.Initialize(unitOfWork, password);
+					VehicleTrackingDataSeeder.Initialize(unitOfWork);
 				}
 				catch (Exception ex)
 				{
@@ -41,6 +39,12 @@ namespace VehicleTracking.API
 
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
 			WebHost.CreateDefaultBuilder(args)
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddConsole();
+                    logging.AddDebug();
+                })
 				.UseStartup<Startup>()
 				.UseUrls("http://localhost:5000");
 	}

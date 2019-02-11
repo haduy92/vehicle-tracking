@@ -4,14 +4,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleTracking.Application.Exceptions;
 using VehicleTracking.Application.Extensions;
-using VehicleTracking.Common;
+using VehicleTracking.Application.Helpers;
+using VehicleTracking.Application.Infrastructure;
 using VehicleTracking.Domain.Entities;
 using VehicleTracking.Domain.ValueObjects;
 using VehicleTracking.Persistence.Infrastructure;
 
 namespace VehicleTracking.Application.Modules.Commands
 {
-	public class UpdateUserCommand : IRequest
+	public class UpdateUserCommand : BaseRequest, IRequest
 	{
 		public string Id { get; set; }
 		public string FirstName { get; set; }
@@ -31,13 +32,11 @@ namespace VehicleTracking.Application.Modules.Commands
 		public class Handler : IRequestHandler<UpdateUserCommand, Unit>
 		{
 			private readonly IUnitOfWork _unitOfWork;
-			private readonly IPassword _password;
 			private readonly IMediator _mediator;
 
-			public Handler(IUnitOfWork unitOfWork, IPassword password, IMediator mediator)
+			public Handler(IUnitOfWork unitOfWork, IMediator mediator)
 			{
 				_unitOfWork = unitOfWork;
-				_password = password;
 				_mediator = mediator;
 			}
 
@@ -62,7 +61,7 @@ namespace VehicleTracking.Application.Modules.Commands
 				if (!request.Password.IsNullOrEmpty())
 				{
 					byte[] passwordHash, passwordSalt;
-					_password.CreatePasswordHash(request.Password, out passwordHash, out passwordSalt);
+					PasswordHelper.CreatePasswordHash(request.Password, out passwordHash, out passwordSalt);
 
 					entity.PasswordHash = passwordHash;
 					entity.PasswordSalt = passwordSalt;

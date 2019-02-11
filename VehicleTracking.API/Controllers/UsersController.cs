@@ -14,13 +14,15 @@ namespace VehicleTracking.API.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<UserViewModel>> Get(string id)
 		{
-			return Ok(await Mediator.Send(new GetUserByIdQuery { Id = id }));
+			return Ok(await Mediator.Send(new GetUserByIdQuery { Id = id, Token = RequestToken }));
 		}
 
 		// GET: api/users/getlist/
-		[HttpGet("{id}")]
+		[HttpGet]
 		public async Task<ActionResult<UserListViewModel>> GetList([FromBody]GetUserListQuery query)
 		{
+			query = query ?? new GetUserListQuery();
+			query.Token = RequestToken;
 			return Ok(await Mediator.Send(query));
 		}
 
@@ -39,6 +41,7 @@ namespace VehicleTracking.API.Controllers
 		[HttpPost]
 		public async Task<ActionResult<string>> Create([FromBody]CreateUserCommand command)
 		{
+			command.Token = RequestToken;
 			return Ok(await Mediator.Send(command));
 		}
 
@@ -46,6 +49,7 @@ namespace VehicleTracking.API.Controllers
 		[HttpPut("{id}")]
 		public async Task<IActionResult> Update([FromRoute] string id, [FromBody] UpdateUserCommand command)
 		{
+			command.Token = RequestToken;
 			await Mediator.Send(command);
 
 			return NoContent();
@@ -55,7 +59,7 @@ namespace VehicleTracking.API.Controllers
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(string id)
 		{
-			await Mediator.Send(new DeleteUserCommand { Id = id });
+			await Mediator.Send(new DeleteUserCommand { Id = id, Token = RequestToken });
 
 			return NoContent();
 		}

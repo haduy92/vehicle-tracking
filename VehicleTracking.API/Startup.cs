@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Text;
 using VehicleTracking.API.Filters;
 using VehicleTracking.Application.Infrastructure;
+using VehicleTracking.Application.Interfaces;
 using VehicleTracking.Application.Modules.Queries;
 using VehicleTracking.Application.Modules.Validators;
 using VehicleTracking.Common;
@@ -34,8 +35,7 @@ namespace VehicleTracking.API
 		public void ConfigureServices(IServiceCollection services)
 		{
 			// Add framework services.
-			services.AddTransient<IPassword, PasswordHelper>();
-			services.AddTransient<IToken, TokenHelper>();
+			services.AddTransient<INotificationService, NotificationService>();
 			services.AddTransient<IDateTime, MachineDateTime>();
 			services.AddTransient<IGeocodingService, GeocodingService>();
 

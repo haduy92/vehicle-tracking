@@ -6,8 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleTracking.Application.Exceptions;
 using VehicleTracking.Application.Infrastructure;
+using VehicleTracking.Application.Interfaces;
 using VehicleTracking.Application.Modules.Models;
-using VehicleTracking.Common;
 using VehicleTracking.Domain.Entities;
 using VehicleTracking.Persistence.Infrastructure;
 

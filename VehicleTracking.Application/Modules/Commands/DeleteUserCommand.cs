@@ -4,12 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleTracking.Application.Exceptions;
 using VehicleTracking.Application.Extensions;
+using VehicleTracking.Application.Infrastructure;
 using VehicleTracking.Domain.Entities;
 using VehicleTracking.Persistence.Infrastructure;
 
 namespace VehicleTracking.Application.Modules.Commands
 {
-	public class DeleteUserCommand : IRequest
+	public class DeleteUserCommand : BaseRequest, IRequest
 	{
 		public string Id { get; set; }
 

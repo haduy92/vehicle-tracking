@@ -10,6 +10,7 @@ using System;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleTracking.Application.Helpers;
 
 namespace VehicleTracking.Application.Modules.Queries
 {
@@ -22,15 +23,11 @@ namespace VehicleTracking.Application.Modules.Queries
 
 		public class Handler : IRequestHandler<GetTokenQuery, string>
 		{
-			private readonly IPassword _password;
-			private readonly IToken _token;
 			private readonly IUnitOfWork _unitOfWork;
 
-			public Handler(IPassword password, IToken token, IUnitOfWork unitOfWork)
+			public Handler(IUnitOfWork unitOfWork)
 			{
 				_unitOfWork = unitOfWork;
-				_password = password;
-				_token = token;
 			}
 
 			public async Task<string> Handle(GetTokenQuery request, CancellationToken cancellationToken)
@@ -44,7 +41,7 @@ namespace VehicleTracking.Application.Modules.Queries
 					throw new NotFoundException(nameof(User), request.EmailAddress);
 				}
 
-				if (!_password.VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+				if (!PasswordHelper.VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
 				{
 					return null;
 				}
@@ -56,7 +53,7 @@ namespace VehicleTracking.Application.Modules.Queries
 						new Claim("user_id", user.Id.ToString())
 					};
 
-					user.Token = _token.CreateToken(request.SecretKey, request.Issuer, claims, DateTime.UtcNow.AddHours(1));
+					user.Token = TokenHelper.CreateToken(request.SecretKey, request.Issuer, claims, DateTime.UtcNow.AddHours(1));
 					_unitOfWork.Commit();
 				}				
 
