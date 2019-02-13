@@ -2,7 +2,6 @@
 
 Vehicle Tracking is a sample application built using ASP.NET Core and Entity Framework Core. The architecture and design of the project is referenced from:
 
-* [JasonGT/NorthwindTraders Github Repo](https://github.com/JasonGT/NorthwindTraders)
 * [Clean Architecture with ASP.NET Core 2.1](https://youtu.be/_lwCVE_XgqI)
 
 ## Getting Started
