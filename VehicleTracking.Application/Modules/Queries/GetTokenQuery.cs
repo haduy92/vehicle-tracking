@@ -1,16 +1,15 @@
-﻿using VehicleTracking.Application.Exceptions;
-using VehicleTracking.Application.Extensions;
-using VehicleTracking.Application.Infrastructure;
-using VehicleTracking.Common;
-using VehicleTracking.Domain.Entities;
-using VehicleTracking.Persistence.Infrastructure;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using VehicleTracking.Application.Exceptions;
+using VehicleTracking.Application.Extensions;
 using VehicleTracking.Application.Helpers;
+using VehicleTracking.Application.Infrastructure;
+using VehicleTracking.Domain.Entities;
+using VehicleTracking.Persistence;
 
 namespace VehicleTracking.Application.Modules.Queries
 {
@@ -23,18 +22,18 @@ namespace VehicleTracking.Application.Modules.Queries
 
 		public class Handler : IRequestHandler<GetTokenQuery, string>
 		{
-			private readonly IUnitOfWork _unitOfWork;
+			private readonly VehicleTrackingDbContext _context;
 
-			public Handler(IUnitOfWork unitOfWork)
+			public Handler(VehicleTrackingDbContext context)
 			{
-				_unitOfWork = unitOfWork;
+				_context = context;
 			}
 
 			public async Task<string> Handle(GetTokenQuery request, CancellationToken cancellationToken)
 			{
-				var user = await _unitOfWork.UserRepository
-					.GetQueryableAsNoTracking(x => x.EmailAddress == request.EmailAddress)
-					.SingleOrDefaultAsync(cancellationToken);
+				var user = await _context.Users
+					.AsNoTracking()
+					.SingleOrDefaultAsync(x => x.EmailAddress == request.EmailAddress, cancellationToken);
 
 				if (user == null)
 				{
@@ -54,7 +53,7 @@ namespace VehicleTracking.Application.Modules.Queries
 					};
 
 					user.Token = TokenHelper.CreateToken(request.SecretKey, request.Issuer, claims, DateTime.UtcNow.AddHours(1));
-					_unitOfWork.Commit();
+					_context.SaveChanges();
 				}				
 
 				return user.Token;

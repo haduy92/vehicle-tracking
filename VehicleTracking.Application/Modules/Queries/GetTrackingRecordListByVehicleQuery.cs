@@ -11,7 +11,7 @@ using VehicleTracking.Application.Interfaces;
 using VehicleTracking.Application.Modules.Models;
 using VehicleTracking.Common;
 using VehicleTracking.Domain.Entities;
-using VehicleTracking.Persistence.Infrastructure;
+using VehicleTracking.Persistence;
 
 namespace VehicleTracking.Application.Modules.Queries
 {
@@ -25,13 +25,13 @@ namespace VehicleTracking.Application.Modules.Queries
 
 		public class Handler : IRequestHandler<GetTrackingRecordListByVehicleQuery, VehicleTrackingRecordListViewModel>
 		{
-			private readonly IUnitOfWork _unitOfWork;
+			private readonly VehicleTrackingDbContext _context;
 			private readonly IDateTime _dateTime;
 			private readonly IGeocodingService _geocodingService;
 
-			public Handler(IUnitOfWork unitOfWork, IGeocodingService geocodingService, IDateTime dateTime)
+			public Handler(VehicleTrackingDbContext context, IGeocodingService geocodingService, IDateTime dateTime)
 			{
-				_unitOfWork = unitOfWork;
+				_context = context;
 				_geocodingService = geocodingService;
 				_dateTime = dateTime;
 			}
@@ -39,12 +39,13 @@ namespace VehicleTracking.Application.Modules.Queries
 			public async Task<VehicleTrackingRecordListViewModel> Handle(GetTrackingRecordListByVehicleQuery request, CancellationToken cancellationToken)
 			{
 				// Check if input vehicle and device code exist
-				Guid vehicleId = await _unitOfWork.VehicleRepository
-					.GetQueryableAsNoTracking(x => x.VehicleCode.ToLower() == request.VehicleCode.ToLower()
+				Guid vehicleId = _context.Vehicles
+					.AsNoTracking()
+					.Where(x => x.VehicleCode.ToLower() == request.VehicleCode.ToLower()
 						&& x.DeviceCode.ToLower() == request.DeviceCode.ToLower()
 						&& x.IsActive)
 					.Select(x => x.Id)
-					.SingleOrDefaultAsync(cancellationToken);
+					.SingleOrDefault();
 
 				if (vehicleId == null || vehicleId == Guid.Empty)
 				{
@@ -55,12 +56,12 @@ namespace VehicleTracking.Application.Modules.Queries
 				var toDate = request.ToDate.ToUniversalTime();
 
 				// Get list vehicle tracking records
-				var listTrackingRecords = _unitOfWork.TrackingSnapshotRepository
-					.GetQueryableAsNoTracking(
-						filter: x => x.VehicleId == vehicleId
-							&& x.RecordedDate >= fromDate.Date
-							&& x.RecordedDate <= toDate.Date,
-						orderBy: x => x.OrderByDescending(p => p.RecordedDate))
+				var listTrackingRecords = _context.TrackingRecordSnapshots
+					.AsNoTracking()
+					.Where(x => x.VehicleId == vehicleId 
+						&& x.RecordedDate >= fromDate.Date
+						&& x.RecordedDate <= toDate.Date)
+					.OrderByDescending(x => x.RecordedDate)
 					.SelectMany(x => x.TrackingRecords)
 					.Where(x => x.RecordedDate >= fromDate && x.RecordedDate <= toDate)
 					.OrderByDescending(x => x.RecordedDate)

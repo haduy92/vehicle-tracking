@@ -15,6 +15,7 @@ namespace VehicleTracking.Persistence.Configurations
 			builder.Property(c => c.Longitude).HasMaxLength(50);
 			// Note: Cluster the table on this index in order to speed up queries
 			builder.HasIndex(c => c.TrackingRecordSnapshotId);
+			builder.Ignore(c => c.UpdatedDate);
 		}
 	}
 }

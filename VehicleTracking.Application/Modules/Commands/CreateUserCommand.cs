@@ -9,7 +9,7 @@ using VehicleTracking.Application.Interfaces;
 using VehicleTracking.Application.Modules.Notifications;
 using VehicleTracking.Domain.Entities;
 using VehicleTracking.Domain.ValueObjects;
-using VehicleTracking.Persistence.Infrastructure;
+using VehicleTracking.Persistence;
 
 namespace VehicleTracking.Application.Modules.Commands
 {
@@ -31,22 +31,22 @@ namespace VehicleTracking.Application.Modules.Commands
 
 		public class Handler : IRequestHandler<CreateUserCommand, Unit>
 		{
-			private readonly IUnitOfWork _unitOfWork;
+			private readonly VehicleTrackingDbContext _context;
             private readonly IMediator _mediator;
 			private readonly INotificationService _notificationService;
 
-			public Handler(IUnitOfWork unitOfWork, IMediator mediator, INotificationService notificationService)
+			public Handler(VehicleTrackingDbContext context, IMediator mediator, INotificationService notificationService)
 			{
-				_unitOfWork = unitOfWork;
+				_context = context;
 				_mediator = mediator;
 				_notificationService = notificationService;
 			}
 
 			public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
 			{
-				var isDuplicatedEmail = _unitOfWork.UserRepository
-					.GetQueryableAsNoTracking(x => x.EmailAddress == request.EmailAddress)
-					.AnyAsync(cancellationToken);
+				var isDuplicatedEmail = _context.Users
+					.AsNoTracking()
+					.AnyAsync(x => x.EmailAddress == request.EmailAddress, cancellationToken);
 
 				if (await isDuplicatedEmail)
 				{
@@ -66,9 +66,9 @@ namespace VehicleTracking.Application.Modules.Commands
 						request.State, request.Country, request.ZipCode)
 				};
 
-				await _unitOfWork.UserRepository.CreateAsync(entity);
+				_context.Users.Add(entity);
 				await _mediator.Publish(new UserCreated { UserId = entity.Id.ToString() });
-				await _unitOfWork.CommitAsync();
+				_context.SaveChanges();
 
 				return Unit.Value;
 			}

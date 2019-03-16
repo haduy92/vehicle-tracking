@@ -8,7 +8,7 @@ using VehicleTracking.Application.Helpers;
 using VehicleTracking.Application.Infrastructure;
 using VehicleTracking.Domain.Entities;
 using VehicleTracking.Domain.ValueObjects;
-using VehicleTracking.Persistence.Infrastructure;
+using VehicleTracking.Persistence;
 
 namespace VehicleTracking.Application.Modules.Commands
 {
@@ -31,21 +31,19 @@ namespace VehicleTracking.Application.Modules.Commands
 
 		public class Handler : IRequestHandler<UpdateUserCommand, Unit>
 		{
-			private readonly IUnitOfWork _unitOfWork;
+			private readonly VehicleTrackingDbContext _context;
 			private readonly IMediator _mediator;
 
-			public Handler(IUnitOfWork unitOfWork, IMediator mediator)
+			public Handler(VehicleTrackingDbContext context, IMediator mediator)
 			{
-				_unitOfWork = unitOfWork;
+				_context = context;
 				_mediator = mediator;
 			}
 
 			public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
 			{
 				var guid = request.Id.ToGUID();
-				var entity = await _unitOfWork.UserRepository
-					.GetQueryable(x => x.Id == guid)
-					.SingleOrDefaultAsync();
+				var entity = await _context.Users.SingleOrDefaultAsync(x => x.Id == guid);
 
 				if (entity == null)
 				{
@@ -67,7 +65,7 @@ namespace VehicleTracking.Application.Modules.Commands
 					entity.PasswordSalt = passwordSalt;
 				}
 
-				await _unitOfWork.CommitAsync(true, cancellationToken);
+				await _context.SaveChangesAsync(cancellationToken);
 
 				return Unit.Value;
 			}

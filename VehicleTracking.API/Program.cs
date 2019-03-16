@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using VehicleTracking.Persistence;
-using VehicleTracking.Persistence.Infrastructure;
 
 namespace VehicleTracking.API
 {
@@ -20,12 +18,7 @@ namespace VehicleTracking.API
 			{
 				try
 				{
-					var context = (VehicleTrackingDbContext) scope.ServiceProvider.GetService<IDbContext>();
-					var unitOfWork = (UnitOfWork) scope.ServiceProvider.GetService<IUnitOfWork>();
-
-					context.Database.Migrate();
-					context.EnsureDatabaseCreated();
-					VehicleTrackingDataSeeder.Initialize(unitOfWork);
+					VehicleTrackingDataSeeder.Initialize(scope.ServiceProvider.GetService<VehicleTrackingDbContext>());
 				}
 				catch (Exception ex)
 				{

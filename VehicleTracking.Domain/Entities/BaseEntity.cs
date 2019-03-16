@@ -11,5 +11,6 @@ namespace VehicleTracking.Domain.Entities
 
 		public Guid Id { get; private set; }
 		public DateTime CreatedDate { get; set; }
+		public DateTime UpdatedDate { get; set; }
 	}
 }

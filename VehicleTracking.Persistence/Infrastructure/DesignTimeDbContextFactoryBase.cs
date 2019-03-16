@@ -18,7 +18,7 @@ namespace VehicleTracking.Persistence.Infrastructure
 			return Create(basePath, Environment.GetEnvironmentVariable(AspNetCoreEnvironment));
 		}
 
-		protected abstract TContext CreateNewInstance(string connectionString);
+		protected abstract TContext CreateNewInstance(DbContextOptions<TContext> options);
 
 		private TContext Create(string basePath, string environmentName)
 		{
@@ -42,7 +42,11 @@ namespace VehicleTracking.Persistence.Infrastructure
                 throw new ArgumentException($"Connection string '{ConnectionStringName}' is null or empty.", nameof(connectionString));
             }
 
-            return CreateNewInstance(connectionString);
+			var optionsBuilder = new DbContextOptionsBuilder<TContext>();
+
+			optionsBuilder.UseNpgsql(connectionString);
+
+			return CreateNewInstance(optionsBuilder.Options);
 		}
 	}
 }

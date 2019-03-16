@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using VehicleTracking.Application.Exceptions;
 using VehicleTracking.Application.Infrastructure;
 using VehicleTracking.Domain.Entities;
-using VehicleTracking.Persistence.Infrastructure;
+using VehicleTracking.Persistence;
 
 namespace VehicleTracking.Application.Modules.Commands
 {
@@ -24,24 +24,23 @@ namespace VehicleTracking.Application.Modules.Commands
 
 		public class Handler : IRequestHandler<CreateVehicleCommand>
 		{
-			private readonly IUnitOfWork _unitOfWork;
+			private readonly VehicleTrackingDbContext _context;
 			private readonly IMediator _mediator;
 
-			public Handler(IUnitOfWork unitOfWork, IMediator mediator)
+			public Handler(VehicleTrackingDbContext context, IMediator mediator)
 			{
-				_unitOfWork = unitOfWork;
+				_context = context;
 				_mediator = mediator;
 			}
 
 			public async Task<Unit> Handle(CreateVehicleCommand request, CancellationToken cancellationToken)
 			{
 				// Check if vehicle and device code exist
-				var exist = _unitOfWork.VehicleRepository
-					.GetQueryableAsNoTracking(x => x.VehicleCode.ToLower() == request.VehicleCode.ToLower()
+				var exist = _context.Vehicles
+					.AsNoTracking()
+					.AnyAsync(x => x.VehicleCode.ToLower() == request.VehicleCode.ToLower()
 						&& x.DeviceCode.ToLower() == request.DeviceCode.ToLower()
-						&& x.IsActive)
-					.Select(x => x.Id)
-					.AnyAsync(cancellationToken);
+						&& x.IsActive, cancellationToken);
 
 				if (await exist)
 				{
@@ -59,8 +58,8 @@ namespace VehicleTracking.Application.Modules.Commands
 					ExtendedData = ToXML(dnr)
 				};
 
-				_unitOfWork.VehicleRepository.Create(vehile);
-				_unitOfWork.Commit();
+				_context.Vehicles.Add(vehile);
+				await _context.SaveChangesAsync(cancellationToken);
 
 				return Unit.Value;
 			}

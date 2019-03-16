@@ -7,7 +7,7 @@ using VehicleTracking.Application.Extensions;
 using VehicleTracking.Application.Infrastructure;
 using VehicleTracking.Application.Modules.Models;
 using VehicleTracking.Domain.Entities;
-using VehicleTracking.Persistence.Infrastructure;
+using VehicleTracking.Persistence;
 
 namespace VehicleTracking.Application.Modules.Queries
 {
@@ -17,20 +17,20 @@ namespace VehicleTracking.Application.Modules.Queries
 
 		public class Handler : IRequestHandler<GetUserByIdQuery, UserViewModel>
 		{
-			private readonly IUnitOfWork _unitOfWork;
+			private readonly VehicleTrackingDbContext _context;
 
-			public Handler(IUnitOfWork unitOfWork)
+			public Handler(VehicleTrackingDbContext context)
 			{
-				_unitOfWork = unitOfWork;
+				_context = context;
 			}
 
 			public async Task<UserViewModel> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
 			{
 				var guid = request.Id.ToGUID();
 
-				var user = await _unitOfWork.UserRepository
-					.GetQueryableAsNoTracking(x => x.Id == guid)
-					.SingleOrDefaultAsync(cancellationToken);
+				var user = await _context.Users
+					.AsNoTracking()
+					.SingleOrDefaultAsync(x => x.Id == guid, cancellationToken);
 
 				if (user == null)
 				{

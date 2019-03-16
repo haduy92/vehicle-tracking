@@ -14,16 +14,16 @@ namespace VehicleTracking.Test.Queries
 		[Fact]
 		public async Task GetUserListTest()
 		{
-			_unitOfWork.UserRepository.CreateMany(new[] 
+			_context.UserRepository.CreateMany(new[] 
 			{
 				new User { FirstName = "User", LastName = "01" },
 				new User { FirstName = "User", LastName = "02" },
 				new User { FirstName = "User", LastName = "03" }
 			});
 
-			_unitOfWork.Commit();
+			_context.Commit();
 
-			var query = new GetUserListQuery.Handler(_unitOfWork);
+			var query = new GetUserListQuery.Handler(_context);
 
 			var result = await query.Handle(new GetUserListQuery(), CancellationToken.None);
 

@@ -1,21 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using VehicleTracking.Infrastructure;
 using VehicleTracking.Persistence;
-using VehicleTracking.Persistence.Infrastructure;
 
 namespace VehicleTracking.Test
 {
 	public class TestBase
 	{
-		protected readonly IUnitOfWork _unitOfWork;
+		protected readonly VehicleTrackingDbContext _context;
 
 		public TestBase()
 		{
-			_unitOfWork = GetUnitOfWork();
+			_context = GetContext();
 		}
 
-		private IUnitOfWork GetUnitOfWork()
+		private VehicleTrackingDbContext GetContext()
 		{
 			var builder = new DbContextOptionsBuilder<VehicleTrackingDbContext>();
 
@@ -26,7 +24,7 @@ namespace VehicleTracking.Test
 			dbContext.Database.EnsureDeleted();
 			dbContext.Database.EnsureCreated();
 			
-			return new UnitOfWork(dbContext, new MachineDateTime());
+			return dbContext;
 		}
 	}
 }

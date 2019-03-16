@@ -6,7 +6,7 @@ using VehicleTracking.Application.Exceptions;
 using VehicleTracking.Application.Extensions;
 using VehicleTracking.Application.Infrastructure;
 using VehicleTracking.Domain.Entities;
-using VehicleTracking.Persistence.Infrastructure;
+using VehicleTracking.Persistence;
 
 namespace VehicleTracking.Application.Modules.Commands
 {
@@ -16,29 +16,29 @@ namespace VehicleTracking.Application.Modules.Commands
 
 		public class Handler : IRequestHandler<DeleteUserCommand, Unit>
 		{
-			private readonly IUnitOfWork _unitOfWork;
+			private readonly VehicleTrackingDbContext _context;
 			private readonly IMediator _mediator;
 
-			public Handler(IUnitOfWork unitOfWork, IMediator mediator)
+			public Handler(VehicleTrackingDbContext context, IMediator mediator)
 			{
-				_unitOfWork = unitOfWork;
+				_context = context;
 				_mediator = mediator;
 			}
 
 			public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
 			{
 				var guid = request.Id.ToGUID();
-				var entity = await _unitOfWork.UserRepository
-					.GetQueryableAsNoTracking(x => x.Id == guid)
-					.FirstOrDefaultAsync();
+				var entity = await _context.Users
+					.AsNoTracking()
+					.FirstOrDefaultAsync(x => x.Id == guid);
 
 				if (entity == null)
 				{
 					throw new NotFoundException(nameof(User), request.Id);
 				}
 
-				_unitOfWork.UserRepository.Delete(entity);
-				await _unitOfWork.CommitAsync(true, cancellationToken);
+				_context.Users.Remove(entity);
+				await _context.SaveChangesAsync(cancellationToken);
 
 				return Unit.Value;
 			}

@@ -14,6 +14,7 @@ namespace VehicleTracking.Persistence.Configurations
 			builder.Property(c => c.TableName).HasMaxLength(50);
 			builder.Property(c => c.Action).HasMaxLength(10);
 			builder.Property(c => c.Action).HasConversion(new EnumToStringConverter<AuditAction>());
+			builder.Ignore(c => c.UpdatedDate);
 		}
 	}
 }

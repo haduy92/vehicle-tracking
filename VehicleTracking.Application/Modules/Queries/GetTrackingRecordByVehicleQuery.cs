@@ -9,6 +9,7 @@ using VehicleTracking.Application.Infrastructure;
 using VehicleTracking.Application.Interfaces;
 using VehicleTracking.Application.Modules.Models;
 using VehicleTracking.Domain.Entities;
+using VehicleTracking.Persistence;
 using VehicleTracking.Persistence.Infrastructure;
 
 namespace VehicleTracking.Application.Modules.Queries
@@ -21,24 +22,25 @@ namespace VehicleTracking.Application.Modules.Queries
 
 		public class Handler : IRequestHandler<GetTrackingRecordByVehicleQuery, VehicleTrackingRecordViewModel>
 		{
-			private readonly IUnitOfWork _unitOfWork;
+			private readonly VehicleTrackingDbContext _context;
 			private readonly IGeocodingService _geocodingService;
 
-			public Handler(IUnitOfWork unitOfWork, IGeocodingService geocodingService)
+			public Handler(VehicleTrackingDbContext context, IGeocodingService geocodingService)
 			{
-				_unitOfWork = unitOfWork;
+				_context = context;
 				_geocodingService = geocodingService;
 			}
 
 			public async Task<VehicleTrackingRecordViewModel> Handle(GetTrackingRecordByVehicleQuery request, CancellationToken cancellationToken)
 			{
 				// Check if input vehicle and device code exist
-				Guid vehicleId = await _unitOfWork.VehicleRepository
-					.GetQueryableAsNoTracking(x => x.VehicleCode.ToLower() == request.VehicleCode.ToLower()
+				Guid vehicleId = _context.Vehicles
+					.AsNoTracking()
+					.Where(x => x.VehicleCode.ToLower() == request.VehicleCode.ToLower()
 						&& x.DeviceCode.ToLower() == request.DeviceCode.ToLower()
 						&& x.IsActive)
 					.Select(x => x.Id)
-					.SingleOrDefaultAsync(cancellationToken);
+					.SingleOrDefault();
 
 				if (vehicleId == null || vehicleId == Guid.Empty)
 				{
@@ -46,10 +48,10 @@ namespace VehicleTracking.Application.Modules.Queries
 				}
 
 				// Get last vehicle tracking record
-				var lastTrackingRecord = await _unitOfWork.TrackingSnapshotRepository
-					.GetQueryableAsNoTracking(
-						filter: x => x.VehicleId == vehicleId,
-						orderBy: x => x.OrderByDescending(p => p.RecordedDate))
+				var lastTrackingRecord = await _context.TrackingRecordSnapshots
+					.AsNoTracking()
+					.Where(x => x.VehicleId == vehicleId)
+					.OrderByDescending(x => x.RecordedDate)
 					.SelectMany(x => x.TrackingRecords)
 					.OrderByDescending(x => x.RecordedDate)
 					.Select(x => new VehicleTrackingRecordViewModel

@@ -1,31 +1,34 @@
-﻿using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using VehicleTracking.Domain.Entities;
-using VehicleTracking.Persistence.Infrastructure;
 
 namespace VehicleTracking.Persistence
 {
 	public class VehicleTrackingDataSeeder
 	{
-		public static void Initialize(IUnitOfWork unitOfWork)
+		public static void Initialize(VehicleTrackingDbContext dbContext)
 		{
 			var seeder = new VehicleTrackingDataSeeder();
-			seeder.SeedAll(unitOfWork);
+			seeder.SeedEverything(dbContext);
 		}
 
-		public void SeedAll(IUnitOfWork unitOfWork)
+		public void SeedEverything(VehicleTrackingDbContext dbContext)
 		{
-			if (unitOfWork.UserRepository.GetQueryable().Any())
+			dbContext.Database.Migrate();
+			dbContext.Database.EnsureCreated();
+
+			if (dbContext.Users.Any())
 			{
 				return; // Db has been seeded
 			}
 
-			SeedVehicles(unitOfWork);
-			SeedUsers(unitOfWork);
+			SeedVehicles(dbContext);
+			SeedUsers(dbContext);
 		}
 
-		private void SeedVehicles(IUnitOfWork unitOfWork)
+		private void SeedVehicles(VehicleTrackingDbContext dbContext)
 		{
 			var vehicles = new[]
 			{
@@ -36,11 +39,11 @@ namespace VehicleTracking.Persistence
 				new Vehicle { VehicleCode = "V005", DeviceCode = "D005", IsActive = false }
 			};
 
-			unitOfWork.VehicleRepository.CreateMany(vehicles);
-			unitOfWork.Commit();
+			dbContext.Vehicles.AddRange(vehicles);
+			dbContext.SaveChanges();
 		}
 
-		private void SeedUsers(IUnitOfWork unitOfWork)
+		private void SeedUsers(VehicleTrackingDbContext dbContext)
 		{
 			byte[] passwordHash, passwordSalt;
 
@@ -50,7 +53,7 @@ namespace VehicleTracking.Persistence
 				passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("admin@123"));
 			}
 
-			unitOfWork.UserRepository.Create(new User
+			dbContext.Users.Add(new User
 			{
 				EmailAddress = "admin@mail.com",
 				PasswordHash = passwordHash,
@@ -59,7 +62,7 @@ namespace VehicleTracking.Persistence
 				LastName = "Smith",
 			});
 
-			unitOfWork.Commit();
+			dbContext.SaveChanges();
 		}
 	}
 }

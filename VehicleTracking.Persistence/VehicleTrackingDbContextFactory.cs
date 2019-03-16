@@ -1,12 +1,13 @@
-﻿using VehicleTracking.Persistence.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore;
+using VehicleTracking.Persistence.Infrastructure;
 
 namespace VehicleTracking.Persistence
 {
 	public class VehicleTrackingDbContextFactory : DesignTimeDbContextFactoryBase<VehicleTrackingDbContext>
 	{
-		protected override VehicleTrackingDbContext CreateNewInstance(string connectionString)
+		protected override VehicleTrackingDbContext CreateNewInstance(DbContextOptions<VehicleTrackingDbContext> options)
 		{
-			return new VehicleTrackingDbContext(connectionString);
+			return new VehicleTrackingDbContext(options);
 		}
 	}
 }

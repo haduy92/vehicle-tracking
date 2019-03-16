@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using VehicleTracking.Application.Exceptions;
 using VehicleTracking.Application.Infrastructure;
 using VehicleTracking.Domain.Entities;
-using VehicleTracking.Persistence.Infrastructure;
+using VehicleTracking.Persistence;
 
 namespace VehicleTracking.Application.Modules.Commands
 {
@@ -21,20 +21,21 @@ namespace VehicleTracking.Application.Modules.Commands
 
 		public class Handler : IRequestHandler<CreateTrackingRecordCommand>
 		{
-			private readonly IUnitOfWork _unitOfWork;
+			private readonly VehicleTrackingDbContext _context;
 			private readonly IMediator _mediator;
 
-			public Handler(IUnitOfWork unitOfWork, IMediator mediator)
+			public Handler(VehicleTrackingDbContext context, IMediator mediator)
 			{
-				_unitOfWork = unitOfWork;
+				_context = context;
 				_mediator = mediator;
 			}
 
 			public async Task<Unit> Handle(CreateTrackingRecordCommand request, CancellationToken cancellationToken)
 			{
 				// Check if vehicle and device code exist
-				Guid vehicleId = await _unitOfWork.VehicleRepository
-					.GetQueryableAsNoTracking(x => x.VehicleCode.ToLower() == request.VehicleCode.ToLower()
+				Guid vehicleId = await _context.Vehicles
+					.AsNoTracking()
+					.Where(x => x.VehicleCode.ToLower() == request.VehicleCode.ToLower()
 						&& x.DeviceCode.ToLower() == request.DeviceCode.ToLower()
 						&& x.IsActive)
 					.Select(x => x.Id)
@@ -55,26 +56,25 @@ namespace VehicleTracking.Application.Modules.Commands
 				};
 
 				// Get lastest snapshot id of vehicle
-				var snapshot = await _unitOfWork.TrackingSnapshotRepository
-					.GetQueryable(
-						filter: x => x.VehicleId == vehicleId && x.RecordedDate == request.RecordedDate.Date,
-						orderBy: x => x.OrderByDescending(p => p.RecordedDate))
+				var snapshot = await _context.TrackingRecordSnapshots
+					.Where(x => x.VehicleId == vehicleId && x.RecordedDate == request.RecordedDate.Date)
+					.OrderByDescending(x => x.RecordedDate)
 					.SingleOrDefaultAsync(cancellationToken);
 
 				if (snapshot == null)
 				{
 					// Create new instance of snapshot
-					snapshot = _unitOfWork.TrackingSnapshotRepository.Create(new TrackingRecordSnapshot
+					snapshot = _context.TrackingRecordSnapshots.Add(new TrackingRecordSnapshot
 					{
 						VehicleId = vehicleId,
 						RecordedDate = request.RecordedDate.Date
-					});
+					}).Entity;
 				}
 
 				trackingRecord.TrackingRecordSnapshotId = snapshot.Id;
 
-				_unitOfWork.TrackingRepository.Create(trackingRecord);
-				_unitOfWork.Commit();
+				_context.TrackingRecords.Add(trackingRecord);
+				_context.SaveChanges();
 
 				return Unit.Value;
 			}

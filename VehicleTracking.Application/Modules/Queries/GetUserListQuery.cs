@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleTracking.Application.Infrastructure;
 using VehicleTracking.Application.Modules.Models;
-using VehicleTracking.Persistence.Infrastructure;
+using VehicleTracking.Persistence;
 
 namespace VehicleTracking.Application.Modules.Queries
 {
@@ -16,20 +16,20 @@ namespace VehicleTracking.Application.Modules.Queries
 
 		public class Handler : IRequestHandler<GetUserListQuery, UserListViewModel>
 		{
-			private readonly IUnitOfWork _unitOfWork;
+			private readonly VehicleTrackingDbContext _context;
 
-			public Handler(IUnitOfWork unitOfWork)
+			public Handler(VehicleTrackingDbContext context)
 			{
-				_unitOfWork = unitOfWork;
+				_context = context;
 			}
 
 			public async Task<UserListViewModel> Handle(GetUserListQuery request, CancellationToken cancellationToken)
 			{
-				var viewModels = await _unitOfWork.UserRepository
-					.GetQueryableAsNoTracking(
-						orderBy: x => x.OrderBy(p => p.FirstName).ThenBy(p => p.LastName),
-						skip: request.PageSize * request.PageNumb,
-						take: request.PageSize)
+				var viewModels = await _context.Users
+					.AsNoTracking()
+					.Skip(request.PageSize* request.PageNumb)
+					.Take(request.PageSize)
+					.OrderBy(p => p.FirstName).ThenBy(p => p.LastName)
 					.Select(UserViewModel.Projection)
 					.ToListAsync(cancellationToken);
 

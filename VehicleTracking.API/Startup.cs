@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -18,7 +19,6 @@ using VehicleTracking.Application.Modules.Validators;
 using VehicleTracking.Common;
 using VehicleTracking.Infrastructure;
 using VehicleTracking.Persistence;
-using VehicleTracking.Persistence.Infrastructure;
 
 namespace VehicleTracking.API
 {
@@ -39,9 +39,8 @@ namespace VehicleTracking.API
 			services.AddTransient<IDateTime, MachineDateTime>();
 			services.AddTransient<IGeocodingService, GeocodingService>();
 
-			// Add infrastructure
-			services.AddScoped<IDbContext>(provider => new VehicleTrackingDbContext(Configuration.GetConnectionString("DefaultConnection")));
-			services.AddScoped<IUnitOfWork, UnitOfWork>();
+			// Add DbContext
+			services.AddDbContext<VehicleTrackingDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
 			// Add MediatR
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
