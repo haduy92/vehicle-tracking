@@ -6,6 +6,7 @@ using VehicleTracking.Application.Exceptions;
 using VehicleTracking.Application.Extensions;
 using VehicleTracking.Application.Helpers;
 using VehicleTracking.Application.Infrastructure;
+using VehicleTracking.Common;
 using VehicleTracking.Domain.Entities;
 using VehicleTracking.Domain.ValueObjects;
 using VehicleTracking.Persistence;
@@ -32,11 +33,13 @@ namespace VehicleTracking.Application.Modules.Commands
 		public class Handler : IRequestHandler<UpdateUserCommand, Unit>
 		{
 			private readonly VehicleTrackingDbContext _context;
+			private readonly IDateTime _dateTime;
 			private readonly IMediator _mediator;
 
-			public Handler(VehicleTrackingDbContext context, IMediator mediator)
+			public Handler(VehicleTrackingDbContext context, IDateTime dateTime, IMediator mediator)
 			{
 				_context = context;
+				_dateTime = dateTime;
 				_mediator = mediator;
 			}
 
@@ -54,6 +57,7 @@ namespace VehicleTracking.Application.Modules.Commands
 				entity.LastName = request.LastName;
 				entity.Address = new Address(request.StreetAddress1, request.StreetAddress2, request.StreetAddress3, 
 					request.City, request.State, request.Country, request.ZipCode);
+				entity.UpdatedDate = _dateTime.Now;
 
 				// update password if it was entered
 				if (!request.Password.IsNullOrEmpty())

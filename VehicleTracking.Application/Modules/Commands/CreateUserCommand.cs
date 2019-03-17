@@ -7,6 +7,7 @@ using VehicleTracking.Application.Helpers;
 using VehicleTracking.Application.Infrastructure;
 using VehicleTracking.Application.Interfaces;
 using VehicleTracking.Application.Modules.Notifications;
+using VehicleTracking.Common;
 using VehicleTracking.Domain.Entities;
 using VehicleTracking.Domain.ValueObjects;
 using VehicleTracking.Persistence;
@@ -33,11 +34,13 @@ namespace VehicleTracking.Application.Modules.Commands
 		{
 			private readonly VehicleTrackingDbContext _context;
             private readonly IMediator _mediator;
+			private readonly IDateTime _dateTime;
 			private readonly INotificationService _notificationService;
 
-			public Handler(VehicleTrackingDbContext context, IMediator mediator, INotificationService notificationService)
+			public Handler(VehicleTrackingDbContext context, IDateTime dateTime, IMediator mediator, INotificationService notificationService)
 			{
 				_context = context;
+				_dateTime = dateTime;
 				_mediator = mediator;
 				_notificationService = notificationService;
 			}
@@ -63,12 +66,14 @@ namespace VehicleTracking.Application.Modules.Commands
 					PasswordHash = passwordHash,
 					PasswordSalt = passwordSalt,
 					Address = new Address(request.StreetAddress1, request.StreetAddress2, request.StreetAddress3, request.City,
-						request.State, request.Country, request.ZipCode)
+						request.State, request.Country, request.ZipCode),
+					CreatedDate = _dateTime.Now
 				};
 
 				_context.Users.Add(entity);
-				await _mediator.Publish(new UserCreated { UserId = entity.Id.ToString() });
 				_context.SaveChanges();
+
+				await _mediator.Publish(new UserCreated { UserId = entity.Id.ToString() });
 
 				return Unit.Value;
 			}

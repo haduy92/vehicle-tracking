@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -32,11 +33,11 @@ namespace VehicleTracking.Persistence
 		{
 			var vehicles = new[]
 			{
-				new Vehicle { VehicleCode = "V001", DeviceCode = "D001", IsActive = true },
-				new Vehicle { VehicleCode = "V002", DeviceCode = "D002", IsActive = true },
-				new Vehicle { VehicleCode = "V003", DeviceCode = "D003", IsActive = false },
-				new Vehicle { VehicleCode = "V004", DeviceCode = "D004", IsActive = true },
-				new Vehicle { VehicleCode = "V005", DeviceCode = "D005", IsActive = false }
+				new Vehicle { VehicleCode = "V001", DeviceCode = "D001", IsActive = true, CreatedDate = DateTime.UtcNow },
+				new Vehicle { VehicleCode = "V002", DeviceCode = "D002", IsActive = true, CreatedDate = DateTime.UtcNow },
+				new Vehicle { VehicleCode = "V003", DeviceCode = "D003", IsActive = false, CreatedDate = DateTime.UtcNow },
+				new Vehicle { VehicleCode = "V004", DeviceCode = "D004", IsActive = true, CreatedDate = DateTime.UtcNow },
+				new Vehicle { VehicleCode = "V005", DeviceCode = "D005", IsActive = false, CreatedDate = DateTime.UtcNow }
 			};
 
 			dbContext.Vehicles.AddRange(vehicles);
@@ -60,6 +61,7 @@ namespace VehicleTracking.Persistence
 				PasswordSalt = passwordSalt,
 				FirstName = "John",
 				LastName = "Smith",
+				CreatedDate = DateTime.UtcNow
 			});
 
 			dbContext.SaveChanges();

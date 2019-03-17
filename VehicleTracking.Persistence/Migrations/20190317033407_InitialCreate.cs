@@ -30,6 +30,7 @@ namespace VehicleTracking.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
                     VehicleId = table.Column<Guid>(nullable: false),
                     RecordedDate = table.Column<DateTime>(nullable: false)
                 },
@@ -44,6 +45,7 @@ namespace VehicleTracking.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: true),
                     LastName = table.Column<string>(maxLength: 50, nullable: true),
                     EmailAddress = table.Column<string>(nullable: true),
@@ -69,6 +71,7 @@ namespace VehicleTracking.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: false),
                     VehicleCode = table.Column<string>(maxLength: 50, nullable: true),
                     DeviceCode = table.Column<string>(maxLength: 50, nullable: true),
                     IsActive = table.Column<bool>(nullable: false),

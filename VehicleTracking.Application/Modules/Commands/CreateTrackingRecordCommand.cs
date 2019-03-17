@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VehicleTracking.Application.Exceptions;
 using VehicleTracking.Application.Infrastructure;
+using VehicleTracking.Common;
 using VehicleTracking.Domain.Entities;
 using VehicleTracking.Persistence;
 
@@ -23,10 +24,12 @@ namespace VehicleTracking.Application.Modules.Commands
 		{
 			private readonly VehicleTrackingDbContext _context;
 			private readonly IMediator _mediator;
+			private readonly IDateTime _dateTime;
 
-			public Handler(VehicleTrackingDbContext context, IMediator mediator)
+			public Handler(VehicleTrackingDbContext context, IDateTime dateTime, IMediator mediator)
 			{
 				_context = context;
+				_dateTime = dateTime;
 				_mediator = mediator;
 			}
 
@@ -52,7 +55,8 @@ namespace VehicleTracking.Application.Modules.Commands
 					Latitude = request.Latitude,
 					Longitude = request.Longitude,
 					VehicleCode = request.VehicleCode,
-					RecordedDate = request.RecordedDate
+					RecordedDate = request.RecordedDate,
+					CreatedDate = _dateTime.Now
 				};
 
 				// Get lastest snapshot id of vehicle
@@ -67,8 +71,10 @@ namespace VehicleTracking.Application.Modules.Commands
 					snapshot = _context.TrackingRecordSnapshots.Add(new TrackingRecordSnapshot
 					{
 						VehicleId = vehicleId,
-						RecordedDate = request.RecordedDate.Date
-					}).Entity;
+						RecordedDate = request.RecordedDate.Date,
+						CreatedDate = _dateTime.Now
+					})
+					.Entity;
 				}
 
 				trackingRecord.TrackingRecordSnapshotId = snapshot.Id;

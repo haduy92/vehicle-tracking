@@ -16,7 +16,7 @@ namespace VehicleTracking.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("VehicleTracking.Domain.Entities.AuditLog", b =>
@@ -83,6 +83,8 @@ namespace VehicleTracking.Persistence.Migrations
 
                     b.Property<DateTime>("RecordedDate");
 
+                    b.Property<DateTime>("UpdatedDate");
+
                     b.Property<Guid>("VehicleId");
 
                     b.HasKey("Id");
@@ -113,6 +115,8 @@ namespace VehicleTracking.Persistence.Migrations
 
                     b.Property<string>("Token");
 
+                    b.Property<DateTime>("UpdatedDate");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -131,6 +135,8 @@ namespace VehicleTracking.Persistence.Migrations
                     b.Property<string>("ExtendedData");
 
                     b.Property<bool>("IsActive");
+
+                    b.Property<DateTime>("UpdatedDate");
 
                     b.Property<string>("VehicleCode")
                         .HasMaxLength(50);
