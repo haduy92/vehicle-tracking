@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.102
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleTracking.Domain", "VehicleTracking.Domain\VehicleTracking.Domain.csproj", "{388D6948-702A-4649-AF83-4ECBDCECA06B}"
 EndProject
@@ -26,11 +26,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleTracking.Application
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{0E28F2B0-9F57-4E0E-99B7-16F7A083C82B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleTracking.API", "VehicleTracking.API\VehicleTracking.API.csproj", "{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VehicleTracking.API", "VehicleTracking.API\VehicleTracking.API.csproj", "{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8627287D-4EFE-47A5-BD7A-16584B502D8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleTracking.Test", "VehicleTracking.Test\VehicleTracking.Test.csproj", "{5F6483B0-A522-436B-AE72-2B033A44B46A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleTracking.Domain.Test", "VehicleTracking.Domain.Test\VehicleTracking.Domain.Test.csproj", "{D0D32E20-B5EA-4498-8835-39E512D432CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleTracking.Application.Test", "VehicleTracking.Application.Test\VehicleTracking.Application.Test.csproj", "{B811B84F-6F7B-452C-8786-F53EA5E91FBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,10 +64,14 @@ Global
 		{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F6483B0-A522-436B-AE72-2B033A44B46A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F6483B0-A522-436B-AE72-2B033A44B46A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F6483B0-A522-436B-AE72-2B033A44B46A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F6483B0-A522-436B-AE72-2B033A44B46A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0D32E20-B5EA-4498-8835-39E512D432CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0D32E20-B5EA-4498-8835-39E512D432CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0D32E20-B5EA-4498-8835-39E512D432CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0D32E20-B5EA-4498-8835-39E512D432CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B811B84F-6F7B-452C-8786-F53EA5E91FBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B811B84F-6F7B-452C-8786-F53EA5E91FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B811B84F-6F7B-452C-8786-F53EA5E91FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B811B84F-6F7B-452C-8786-F53EA5E91FBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,7 +87,8 @@ Global
 		{4B029951-8D7C-4111-AC5B-13A991515DB6} = {FDE858B7-0A45-4240-9FDB-3AEA6AD9CDF3}
 		{0E28F2B0-9F57-4E0E-99B7-16F7A083C82B} = {207D95D8-D285-4780-B24E-6266419DA295}
 		{C3B5538F-BB33-430F-8AED-0FE5A4C7B4CE} = {0E28F2B0-9F57-4E0E-99B7-16F7A083C82B}
-		{5F6483B0-A522-436B-AE72-2B033A44B46A} = {8627287D-4EFE-47A5-BD7A-16584B502D8F}
+		{D0D32E20-B5EA-4498-8835-39E512D432CB} = {8627287D-4EFE-47A5-BD7A-16584B502D8F}
+		{B811B84F-6F7B-452C-8786-F53EA5E91FBD} = {8627287D-4EFE-47A5-BD7A-16584B502D8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5F2F5A7-8B73-4321-A886-B01C514C0A55}

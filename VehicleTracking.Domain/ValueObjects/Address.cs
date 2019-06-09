@@ -10,29 +10,18 @@ namespace VehicleTracking.Domain.ValueObjects
 		public string StreetAddress3 { get; private set; }
 		public string City { get; private set; }
 		public string State { get; private set; }
-		public string Country { get; private set; }
 		public string ZipCode { get; private set; }
+		public string Country { get; private set; }
 
 		private Address() { }
 
-		public Address(string streetAddress1, string city, string state, string country, string zipCode)
+		public Address(string streetAddress1, string city, string state, string zipCode, string country, string streetAddress2 = "", string streetAddress3 = "")
 		{
 			StreetAddress1 = streetAddress1;
 			City = city;
 			State = state;
-			Country = country;
 			ZipCode = zipCode;
-		}
-
-		public Address(string streetAddress1, string streetAddress2, string city, string state, string country, string zipcode)
-		: this(streetAddress1, city, state, zipcode, country)
-		{
-			StreetAddress2 = streetAddress2;
-		}
-
-		public Address(string streetAddress1, string streetAddress2, string streetAddress3, string city, string state, string country, string zipcode)
-		: this(streetAddress1, city, state, zipcode, country)
-		{
+			Country = country;
 			StreetAddress2 = streetAddress2;
 			StreetAddress3 = streetAddress3;
 		}
@@ -41,9 +30,10 @@ namespace VehicleTracking.Domain.ValueObjects
 		{
 			return new Address("", "", "", "", "");
 		}
+
 		public override string ToString()
 		{
-			return $"{StreetAddress1} {City} {State} {ZipCode} {Country}";
+			return $"{StreetAddress1} Street {City} City {State} {ZipCode} {Country}";
 		}
 
 		public static implicit operator string(Address address)
@@ -58,8 +48,8 @@ namespace VehicleTracking.Domain.ValueObjects
 			yield return StreetAddress3;
 			yield return City;
 			yield return State;
-			yield return Country;
 			yield return ZipCode;
+			yield return Country;
 		}
 	}
 }

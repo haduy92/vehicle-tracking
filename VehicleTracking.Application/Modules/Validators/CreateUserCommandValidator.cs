@@ -7,7 +7,7 @@ namespace VehicleTracking.Application.Modules.Validators
 	{
 		public CreateUserCommandValidator()
 		{
-			RuleFor(x => x.EmailAddress)
+			RuleFor(x => x.Email)
 				.NotNull()
 				.NotEmpty();
 			RuleFor(x => x.Password)

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using VehicleTracking.Application.Interfaces;
@@ -8,7 +9,8 @@ namespace VehicleTracking.Application.Modules.Notifications
 {
 	public class UserCreated : INotification
 	{
-		public string UserId { get; set; }
+		public string Id { get; set; }
+		public string Email { get; set; }
 
 		public class UserCreatedHandler : INotificationHandler<UserCreated>
 		{

@@ -56,7 +56,7 @@ namespace VehicleTracking.Persistence
 
 			dbContext.Users.Add(new User
 			{
-				EmailAddress = "admin@mail.com",
+				Email = "admin@mail.com",
 				PasswordHash = passwordHash,
 				PasswordSalt = passwordSalt,
 				FirstName = "John",

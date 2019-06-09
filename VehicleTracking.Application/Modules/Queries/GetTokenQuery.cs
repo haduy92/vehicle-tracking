@@ -33,7 +33,7 @@ namespace VehicleTracking.Application.Modules.Queries
 			{
 				var user = await _context.Users
 					.AsNoTracking()
-					.SingleOrDefaultAsync(x => x.EmailAddress == request.EmailAddress, cancellationToken);
+					.SingleOrDefaultAsync(x => x.Email == request.EmailAddress, cancellationToken);
 
 				if (user == null)
 				{
